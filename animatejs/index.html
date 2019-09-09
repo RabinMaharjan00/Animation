@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <script src="index.js"></script> -->
+    <link rel="stylesheet" href="" />
+</head>
+
+<body>
+    <div id="box" style="position: absolute; top: 10px; left: 10px; height: 50px; width: 50px; background-color: red;"></div>
+    <script>
+        var box = document.getElementById("box"),
+            boxPos = 10,
+            boxVelocity = 0.08,
+            lastFrame = 0,
+            maxFPM = 10,
+            limit = 300;
+
+        function update(delta) {
+            boxPos += boxVelocity * delta;
+            // Switch directions if we go too far
+            if (boxPos >= limit || boxPos <= 0) boxVelocity = -boxVelocity;
+        }
+
+        function draw() {
+            box.style.left = boxPos + "px";
+        }
+
+        function mainLoop(timestamp) {
+            if (timestamp < lastFrame + 1000 / maxFPM) {
+                requestAnimationFrame(mainLoop);
+                return;
+            }
+            delta = timestamp - lastFrame;
+            lastFrame = timestamp;
+            update(delta);
+            draw();
+            requestAnimationFrame(mainLoop);
+        }
+
+        requestAnimationFrame(mainLoop);
+    </script>
+</body>
+
+</html>
